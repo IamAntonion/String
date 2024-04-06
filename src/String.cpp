@@ -31,7 +31,8 @@ String& String::operator=(const String& str) {
     if (this != &str) {
         if (data_) delete[] data_;
         this->size_ = str.size_;
-        this->data_ = new char[size_ + 1];
+        // this->data_ = new char[size_ + 1];
+        this->data_ = new char[size_];
         //CopyString(this->data_,str.data_);
         strcpy(this->data_, str.data_);
     }
@@ -72,7 +73,7 @@ size_t String::LengthString(const char* data) {
 
 void String::AddStr(const char* data) {
     size_t tmp_size = size_ + LengthString(data);
-    char* tmp_data = new char[tmp_size];
+    char* tmp_data = new char[tmp_size + 1];
 
     CopyString(tmp_data, data_);
     CopyString(tmp_data + tmp_size, data);
@@ -89,5 +90,10 @@ char* String::LowerCase() const {
         lower[i] = std::tolower(data_[i]);
     }
     lower[size_ + 1] = '\0';
+    //lower[size_] = '\0';
     return lower;
+}
+
+size_t String::Size() const {
+    return size_;
 }

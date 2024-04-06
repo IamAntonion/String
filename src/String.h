@@ -15,6 +15,7 @@ public:
 
     bool Empty() const;
     const char* GetData() const;
+    size_t Size() const;
 
     char* LowerCase() const;
 private:
