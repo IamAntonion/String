@@ -87,7 +87,6 @@ void TestLower() {
         std::string str = "bac";
         for (const auto& s : str) {
             assert(*word == s);
-            //std::cout << *word << std::endl;
             ++word;
         }
     }
@@ -125,19 +124,20 @@ void TestReverseLexWords() {
         int index = 0;
         for (const String& s : first) {
             assert(s.GetData() == output[index]);
+            //std::cout << s.GetData() << std::endl; 
             ++index;
         }
     }
     {
         std::vector<String> second;
-        std::vector<std::string> input = {"1", "5", "23", "3", "7", "99"};
+        std::vector<std::string> input = {"1", "5", "23", "3", "7", "2", "99"};
         for (const std::string& str : input) {
             second.push_back(String(str.c_str()));
         }
 
         GetReverseLexWord(second);
 
-        std::vector<std::string> output = {"99", "7", "5", "3", "23", "1"};
+        std::vector<std::string> output = {"99", "7", "5", "3", "23", "2", "1"};
         int index = 0;
         for (const String& s : second) {
             assert(s.GetData() == output[index]);
@@ -154,7 +154,7 @@ void Tests() {
     TestReverseLexWords();
     TestAddClassicString();
 
-    std::cout << "All tests passed successfully!" << std::endl;
+    std::cout << "All tests passed success!" << std::endl;
 }
 
 int main() {

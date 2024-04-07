@@ -64,7 +64,7 @@ void String::CopyString(char* fillableData, const char* data) {
     *tmp = '\0';
 }
 
-size_t String::LengthString(const char* data) {
+size_t String::LengthString(const char* data) const {
     const char* end_data = data;
     while(*end_data) {
         ++end_data;
@@ -78,6 +78,8 @@ void String::AddStr(const char* data) {
 
     strcpy(tmp_data, data_);
     strcpy(tmp_data + strlen(data), data);
+    //CopyString(tmp_data, data_);
+    //CopyString(tmp_data + strlen(data), data);
 
     if (data_) delete[] data_;
 
