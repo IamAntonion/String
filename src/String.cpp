@@ -5,7 +5,7 @@ String::String() : data_(nullptr), size_(0) {}
 String::String(const char* data) {
     size_ = strlen(data);
     //size_ = LengthString(data);
-    data_ = new char[size_ + 1];
+    data_ = new char[size_];
 
     strcpy(data_, data);
     //CopyString(data_, data);

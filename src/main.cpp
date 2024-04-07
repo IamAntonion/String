@@ -7,15 +7,15 @@
 #include "String.h"
 
 bool lexicograp(const char* iter_begin1, const char* iter_last1, const char* iter_begin2, const char* iter_last2) {
-    auto iter1 = iter_begin1;
-    auto iter2 = iter_begin2;
+    auto iter1 = iter_last1;
+    auto iter2 = iter_last2;
 
-    for (; (iter1 != iter_last1) && (iter2 != iter_last2); ++iter1, ++iter2) {
-        if (*iter1 < *iter2) return true;
-        if (*iter1 > *iter2) return false;
+    for (; (iter1 != iter_begin1 - 1) && (iter2 != iter_begin2 - 1); --iter1, --iter2) {
+        if (*iter1 > *iter2) return true;
+        if (*iter1 < *iter2) return false;
     }
 
-    return (iter1 == iter_last1) && (iter2 != iter_last2); 
+    return (iter1 == iter_begin1) && (iter2 != iter_begin2); 
 }
 
 void GetReverseLexWord(std::vector<String>& strings) {
@@ -23,8 +23,8 @@ void GetReverseLexWord(std::vector<String>& strings) {
     std::sort(strings.rbegin(), strings.rend(), [](const String& lhs, const String& rhs){
         const char* low_lhs = lhs.LowerCase();
         const char* low_rhs = rhs.LowerCase();
-        size_t size_lhs = lhs.Size();
-        size_t size_rhs = rhs.Size();
+        size_t size_lhs = lhs.Size() - 1;
+        size_t size_rhs = rhs.Size() - 1;
 
         return lexicograp(low_lhs, low_lhs + size_lhs, low_rhs, low_rhs + size_rhs);
     });
@@ -46,7 +46,7 @@ String operator+(const String& str, const char* data) {
 
 void TestCopyConstructor() {
     {
-        String first("aaa");
+        String first("aaa\0");
         String second = first;
         const char* first_data = first.GetData();
         const char* second_data = second.GetData();
@@ -62,7 +62,7 @@ void TestEmpty() {
 
         assert(first.Empty());
 
-        String second("123");
+        String second("123\0");
         first = second;
 
         assert(!first.Empty());
@@ -72,7 +72,7 @@ void TestEmpty() {
 
 void TestMoveConstructor() {
     {
-        String first("aaa");
+        String first("aaa\0");
         String second(std::move(first));
 
         assert(first.Empty());
@@ -84,7 +84,7 @@ void TestLower() {
     {
         String first("Bac\0");
         char* word = first.LowerCase();
-        std::string str = "bac";
+        std::string str = "bac\0";
         for (const auto& s : str) {
             assert(*word == s);
             ++word;
@@ -113,36 +113,41 @@ void TestAddClassicString() {
 void TestReverseLexWords() {
     {
         std::vector<String> first;
-        std::vector<std::string> input = {"aaa", "bbb", "ccc", "ddd", "abe", "abc"};
+        std::vector<std::string> input = {"a\0", "aaa\0", "bbb\0", "ccc\0", "ddd\0", "abe\0", "abc\0", "aba\0", "cba\0", "bba\0", "cbb\0"};
         for (const std::string& str : input) {
             first.push_back(String(str.c_str()));
         }
 
         GetReverseLexWord(first);
 
-        std::vector<std::string> output = {"ddd", "ccc", "bbb", "abe", "abc", "aaa"};
+        std::vector<std::string> output = {"a\0", "aaa\0", "aba\0", "bba\0", "cba\0", "bbb\0", "cbb\0",  "abc\0", "ccc\0", "ddd\0", "abe\0"};
         int index = 0;
         for (const String& s : first) {
             assert(s.GetData() == output[index]);
-            //std::cout << s.GetData() << std::endl; 
             ++index;
         }
     }
     {
         std::vector<String> second;
-        std::vector<std::string> input = {"1", "5", "23", "3", "7", "2", "99"};
+        std::vector<std::string> input = {"1\0", "5\0", "23\0", "3\0", "7\0", "2\0", "99\0"};
         for (const std::string& str : input) {
             second.push_back(String(str.c_str()));
         }
 
         GetReverseLexWord(second);
 
-        std::vector<std::string> output = {"99", "7", "5", "3", "23", "2", "1"};
+        std::vector<std::string> output = {"1\0", "2\0", "3\0", "23\0", "5\0", "7\0", "99\0"};
         int index = 0;
         for (const String& s : second) {
             assert(s.GetData() == output[index]);
             ++index;
         }
+    }
+}
+void TestSize() {
+    {
+        String first("123");
+        assert(first.Size() == 3);
     }
 }
 
@@ -153,6 +158,7 @@ void Tests() {
     TestLower();
     TestReverseLexWords();
     TestAddClassicString();
+    TestSize();
 
     std::cout << "All tests passed success!" << std::endl;
 }
