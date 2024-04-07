@@ -47,6 +47,10 @@ String operator+(const char* data, const String& str) {
     return String(data) + str;
 }
 
+String operator+(const String& str, const char* data) {
+    return str + String(data);
+}
+
 void TestCopyConstructor() {
     String first("aaa");
     String second = first;
@@ -80,6 +84,26 @@ void TestLower() {
     }
 }
 
+void TestAddClassicString() {
+    {
+        String first("123\0");
+        String second("456\0");
+        first += second;
+        //std::cerr << first.GetData() << std::endl;
+        std::string str = first.GetData();
+        assert(str == "123456\0");
+    }
+    {
+        std::string str = "Hello world!\0";
+        String cont(str.c_str());
+        std::string add = " Hola amigo!\0";
+        cont = cont + add.c_str();
+        std::string result = cont.GetData();
+        //std::cerr << cont.GetData() << " == " << "Hello world! Hola amigo!\0" << std::endl;
+        assert(result == "Hello world! Hola amigo!\0");
+    }
+}
+
 void TestReverseLexWords() {
     std::vector<String> first;
     std::vector<std::string> input = {"aaa", "bbb", "ccc", "ddd", "abe", "abc"};
@@ -103,6 +127,9 @@ int main() {
     TestMoveConstructor();
     TestLower();
     TestReverseLexWords();
+    TestAddClassicString();
+
+    std::cout << "All tests passed successfully!" << std::endl;
 
     std::vector<String> strings;
     std::string str;

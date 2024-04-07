@@ -72,11 +72,11 @@ size_t String::LengthString(const char* data) {
 }
 
 void String::AddStr(const char* data) {
-    size_t tmp_size = size_ + LengthString(data);
+    size_t tmp_size = size_ + strlen(data);
     char* tmp_data = new char[tmp_size + 1];
 
-    CopyString(tmp_data, data_);
-    CopyString(tmp_data + tmp_size, data);
+    strcpy(tmp_data, data_);
+    strcpy(tmp_data + strlen(data), data);
 
     if (data_) delete[] data_;
 
