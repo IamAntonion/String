@@ -70,23 +70,6 @@ void TestMoveConstructor() {
     assert(!second.Empty());
 }
 
-void TestReverseLexWords() {
-    std::vector<String> first;
-    std::vector<std::string> input = {"aaa", "bbb", "ccc", "ddd", "abe", "abc"};
-    for (const std::string& str : input) {
-        first.push_back(String(str.c_str()));
-    }
-
-    GetReverseLexWord(first);
-
-    std::vector<std::string> output = {"ddd", "ccc", "bbb", "bea", "abc", "aaa"};
-    int index = 0;
-    for (const String& s : first) {
-        assert(s.GetData() == output[index]);
-        ++index;
-    }
-}
-
 void TestLower() {
     String first("Bac\0");
     char* word = first.LowerCase();
@@ -97,12 +80,29 @@ void TestLower() {
     }
 }
 
+void TestReverseLexWords() {
+    std::vector<String> first;
+    std::vector<std::string> input = {"aaa", "bbb", "ccc", "ddd", "abe", "abc"};
+    for (const std::string& str : input) {
+        first.push_back(String(str.c_str()));
+    }
+
+    GetReverseLexWord(first);
+
+    std::vector<std::string> output = {"ddd", "ccc", "bbb", "abe", "abc", "aaa"};
+    int index = 0;
+    for (const String& s : first) {
+        assert(s.GetData() == output[index]);
+        ++index;
+    }
+}
+
 int main() {
     TestCopyConstructor();
     TestEmpty();
     TestMoveConstructor();
     TestLower();
-    //TestReverseLexWords();
+    TestReverseLexWords();
 
     std::vector<String> strings;
     std::string str;
