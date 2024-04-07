@@ -7,7 +7,7 @@ class String {
 public:
     String();                                       // The constructor creates a String with null data and size 0
     explicit String(const char* data);              // The constructor creates a string with the input parameter data 
-    String(const String& str);                      // The constructor creates a string with the other String parameters
+    String(const String& str);                      // The constructor creates a string with the other String parameters (Copy)
     String(String&& str) noexcept;                  // Move semantics
     ~String() noexcept;                             // The destructor frees data 
 

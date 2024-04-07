@@ -54,6 +54,8 @@ void TestCopyConstructor() {
             assert(*first_data == *second_data);
         }
     }
+
+    std::cerr << "Copy constructor test: success" << std::endl;
 }
 
 void TestEmpty() {
@@ -68,9 +70,10 @@ void TestEmpty() {
         assert(!first.Empty());
         assert(!second.Empty());
     }
+    std::cerr << "Empty test: success" << std::endl;
 }
 
-void TestMoveConstructor() {
+void TestMoveSemantics() {
     {
         String first("aaa\0");
         String second(std::move(first));
@@ -78,6 +81,7 @@ void TestMoveConstructor() {
         assert(first.Empty());
         assert(!second.Empty());
     }
+    std::cerr << "Move semantics test: success" << std::endl;
 }
 
 void TestLower() {
@@ -90,6 +94,7 @@ void TestLower() {
             ++word;
         }
     }
+    std::cerr << "Lower case test: success" << std::endl;
 }
 
 void TestAddClassicString() {
@@ -108,6 +113,7 @@ void TestAddClassicString() {
         std::string result = cont.GetData();
         assert(result == "Hello world! Hola amigo!\0");
     }
+    std::cerr << "Add class String test: success" << std::endl;
 }
 
 void TestReverseLexWords() {
@@ -143,24 +149,26 @@ void TestReverseLexWords() {
             ++index;
         }
     }
+    std::cerr << "Reverse lexicographic order test: success" << std::endl;
 }
 void TestSize() {
     {
         String first("123");
         assert(first.Size() == 3);
     }
+    std::cerr << "Size test: success" << std::endl;
 }
 
 void Tests() {
     TestCopyConstructor();
     TestEmpty();
-    TestMoveConstructor();
+    TestSize();
+    TestMoveSemantics();
     TestLower();
     TestReverseLexWords();
     TestAddClassicString();
-    TestSize();
 
-    std::cout << "All tests passed success!" << std::endl;
+    std::cerr << "All tests passed success!" << std::endl;
 }
 
 int main() {
