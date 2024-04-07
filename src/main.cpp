@@ -6,14 +6,6 @@
 
 #include "String.h"
 
-/*
-input: 
-aaa bbb ccc ddd bre abc
-
-output:
-ddd ccc bbb bea abc aaa
-*/
-
 bool lexicograp(const char* iter_begin1, const char* iter_last1, const char* iter_begin2, const char* iter_last2) {
     auto iter1 = iter_begin1;
     auto iter2 = iter_begin2;
@@ -27,6 +19,7 @@ bool lexicograp(const char* iter_begin1, const char* iter_last1, const char* ite
 }
 
 void GetReverseLexWord(std::vector<String>& strings) {
+    if (strings.empty()) return;
     std::sort(strings.rbegin(), strings.rend(), [](const String& lhs, const String& rhs){
         const char* low_lhs = lhs.LowerCase();
         const char* low_rhs = rhs.LowerCase();
@@ -52,35 +45,51 @@ String operator+(const String& str, const char* data) {
 }
 
 void TestCopyConstructor() {
-    String first("aaa");
-    String second = first;
-    const char* first_data = first.GetData();
-    const char* second_data = second.GetData();
-    for (;*first_data != '\0'; ++first_data, ++second_data) {
-        assert(*first_data == *second_data);
+    {
+        String first("aaa");
+        String second = first;
+        const char* first_data = first.GetData();
+        const char* second_data = second.GetData();
+        for (;*first_data != '\0'; ++first_data, ++second_data) {
+            assert(*first_data == *second_data);
+        }
     }
 }
 
 void TestEmpty() {
-    String first;
-    assert(first.Empty() == true);
+    {
+        String first;
+
+        assert(first.Empty());
+
+        String second("123");
+        first = second;
+
+        assert(!first.Empty());
+        assert(!second.Empty());
+    }
 }
 
 void TestMoveConstructor() {
-    String first("aaa");
-    String second(std::move(first));
+    {
+        String first("aaa");
+        String second(std::move(first));
 
-    assert(first.Empty());
-    assert(!second.Empty());
+        assert(first.Empty());
+        assert(!second.Empty());
+    }
 }
 
 void TestLower() {
-    String first("Bac\0");
-    char* word = first.LowerCase();
-    std::string str = "bac";
-    for (const auto& s : str) {
-        assert(*word == s);
-        ++word;
+    {
+        String first("Bac\0");
+        char* word = first.LowerCase();
+        std::string str = "bac";
+        for (const auto& s : str) {
+            assert(*word == s);
+            //std::cout << *word << std::endl;
+            ++word;
+        }
     }
 }
 
@@ -89,7 +98,6 @@ void TestAddClassicString() {
         String first("123\0");
         String second("456\0");
         first += second;
-        //std::cerr << first.GetData() << std::endl;
         std::string str = first.GetData();
         assert(str == "123456\0");
     }
@@ -99,29 +107,46 @@ void TestAddClassicString() {
         std::string add = " Hola amigo!\0";
         cont = cont + add.c_str();
         std::string result = cont.GetData();
-        //std::cerr << cont.GetData() << " == " << "Hello world! Hola amigo!\0" << std::endl;
         assert(result == "Hello world! Hola amigo!\0");
     }
 }
 
 void TestReverseLexWords() {
-    std::vector<String> first;
-    std::vector<std::string> input = {"aaa", "bbb", "ccc", "ddd", "abe", "abc"};
-    for (const std::string& str : input) {
-        first.push_back(String(str.c_str()));
+    {
+        std::vector<String> first;
+        std::vector<std::string> input = {"aaa", "bbb", "ccc", "ddd", "abe", "abc"};
+        for (const std::string& str : input) {
+            first.push_back(String(str.c_str()));
+        }
+
+        GetReverseLexWord(first);
+
+        std::vector<std::string> output = {"ddd", "ccc", "bbb", "abe", "abc", "aaa"};
+        int index = 0;
+        for (const String& s : first) {
+            assert(s.GetData() == output[index]);
+            ++index;
+        }
     }
+    {
+        std::vector<String> second;
+        std::vector<std::string> input = {"1", "5", "23", "3", "7", "99"};
+        for (const std::string& str : input) {
+            second.push_back(String(str.c_str()));
+        }
 
-    GetReverseLexWord(first);
+        GetReverseLexWord(second);
 
-    std::vector<std::string> output = {"ddd", "ccc", "bbb", "abe", "abc", "aaa"};
-    int index = 0;
-    for (const String& s : first) {
-        assert(s.GetData() == output[index]);
-        ++index;
+        std::vector<std::string> output = {"99", "7", "5", "3", "23", "1"};
+        int index = 0;
+        for (const String& s : second) {
+            assert(s.GetData() == output[index]);
+            ++index;
+        }
     }
 }
 
-int main() {
+void Tests() {
     TestCopyConstructor();
     TestEmpty();
     TestMoveConstructor();
@@ -130,6 +155,10 @@ int main() {
     TestAddClassicString();
 
     std::cout << "All tests passed successfully!" << std::endl;
+}
+
+int main() {
+    Tests();
 
     std::vector<String> strings;
     std::string str;

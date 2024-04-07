@@ -3,17 +3,18 @@
 String::String() : data_(nullptr), size_(0) {}
 
 String::String(const char* data) {
-    //size_ = LengthString(data);
     size_ = strlen(data);
+    //size_ = LengthString(data);
     data_ = new char[size_ + 1];
 
-    //CopyString(data_, data);
     strcpy(data_, data);
+    //CopyString(data_, data);
 }
 
 String::String(const String& str) {
     this->size_ = str.size_;
     this->data_ = new char[size_ + 1];
+
     strcpy(this->data_, str.data_);
     //CopyString(this->data_, str.data_);
 }
@@ -31,10 +32,10 @@ String& String::operator=(const String& str) {
     if (this != &str) {
         if (data_) delete[] data_;
         this->size_ = str.size_;
-        // this->data_ = new char[size_ + 1];
-        this->data_ = new char[size_];
-        //CopyString(this->data_,str.data_);
+        this->data_ = new char[size_ + 1];
+
         strcpy(this->data_, str.data_);
+        //CopyString(this->data_,str.data_);
     }
     return *this;
 }
@@ -90,7 +91,6 @@ char* String::LowerCase() const {
         lower[i] = std::tolower(data_[i]);
     }
     lower[size_ + 1] = '\0';
-    //lower[size_] = '\0';
     return lower;
 }
 
